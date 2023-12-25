@@ -1,0 +1,1 @@
+Maybe can use a pixmap instead of paint calls for the map
