@@ -1,6 +1,7 @@
 import yaml
 
 from canvas import Canvas
+# from map import Map
 from model import Model
 
 from PyQt6.QtWidgets import (
@@ -8,7 +9,8 @@ from PyQt6.QtWidgets import (
     QMainWindow,
     QWidget,
     QToolBar,
-    QScrollArea
+    QScrollArea,
+    QVBoxLayout
 )
 from PyQt6.QtGui import (
     QPainter,
@@ -27,8 +29,11 @@ class View(QMainWindow):
         super().__init__(parent=None)
         self.model = model
 
+        self.layout = QVBoxLayout(self)
+        # self.setLayout(self.layout)
+
         self.scroll = QScrollArea()
-        self.widget = Canvas(model)
+        self.widget = Canvas(model, self)
         self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
         self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
         self.scroll.setWidget(self.widget)
@@ -36,6 +41,8 @@ class View(QMainWindow):
         self.setWindowTitle("Cryptamap")
         self.setCentralWidget(self.scroll)
         self.createToolBar(Qt.ToolBarArea.LeftToolBarArea, "Tools", self)
+
+        self.show()
 
     def createToolBar(self, location, *args):
         self.toolBar = QToolBar(*args)

@@ -13,5 +13,6 @@ class Model:
         print("PLACEHOLDER")
 
     def changeScale(self, scaleFac):
-        if self.scale >= 0.1:
+        print(scaleFac)
+        if self.scale >= 0.15 or scaleFac > 0:
             self.scale += scaleFac
