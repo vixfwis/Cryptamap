@@ -7,6 +7,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtGui import (
     QPainter,
     QColor,
+    QRgba64,
     QFont
 )
 
@@ -20,7 +21,11 @@ from model import Model
 
 def main():
     app = QApplication([])
-    model = Model(QSize(30,20), 72)
+    model = Model(
+        size = QSize(30,20),
+        dpi = 72,
+        background = QColor('black')
+    )
     view = View(model)
     view.show()
     sys.exit(app.exec())

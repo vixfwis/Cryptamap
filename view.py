@@ -17,11 +17,14 @@ from PyQt6.QtGui import (
     QColor,
     QFont,
     QAction,
-    QIcon
+    QIcon,
+    QWheelEvent
 )
 from PyQt6.QtCore import (
     Qt,
-    QSize
+    QSize,
+    QRect,
+    QPoint
 )
 
 class View(QMainWindow):
@@ -32,7 +35,7 @@ class View(QMainWindow):
         self.layout = QVBoxLayout(self)
         # self.setLayout(self.layout)
 
-        self.scroll = QScrollArea()
+        self.scroll = ScrollAreaZoom(self.model, self)
         self.widget = Canvas(model, self)
         self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
         self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
@@ -76,3 +79,18 @@ class View(QMainWindow):
 
         return buttons
     
+class ScrollAreaZoom(QScrollArea):
+    def __init__(self, model: Model, view: View, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.view = view
+        self.model = model
+
+    def wheelEvent(self, event):
+        self.model.changeScale(event.angleDelta().y()/120 * 0.1)
+
+        geo = QRect(QPoint(0,0), self.view.widget.map.pixSize*self.model.scale)
+        self.view.widget.imageWr.setGeometry(geo)
+        self.view.widget.setGeometry(geo)
+        self.setGeometry(geo)
+        self.show()
+        #print(self.model.scale)
