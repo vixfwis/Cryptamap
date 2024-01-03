@@ -91,6 +91,7 @@ class ScrollAreaZoom(QScrollArea):
         geo = QRect(QPoint(0,0), self.view.widget.map.pixSize*self.model.scale)
         self.view.widget.imageWr.setGeometry(geo)
         self.view.widget.setGeometry(geo)
+        self.view.setGeometry(geo)
         self.setGeometry(geo)
         self.show()
         #print(self.model.scale)

@@ -43,7 +43,7 @@ class Canvas(QWidget):
         self.layout = QVBoxLayout(self)
 
         self.imageWr = QLabel("")
-        self.imageWr.setPixmap(QPixmap.fromImage(self.map))
+        self.imageWr.setPixmap(QPixmap.fromImage(self.map.show()))
         self.layout.addWidget(self.imageWr)
 
         screenSize = QApplication.primaryScreen().size()
@@ -57,6 +57,7 @@ class Canvas(QWidget):
         self.model.changeScale(event.angleDelta().y()/120 * 0.1)
 
         geo = QRect(QPoint(0,0), self.map.pixSize*self.model.scale)
+        self.imageWr.setPixmap(QPixmap.fromImage(self.map.show()))
         self.imageWr.setGeometry(geo)
         self.setGeometry(geo)
         print(self.model.scale)

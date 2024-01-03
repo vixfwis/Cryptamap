@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import map
-
 from PyQt6.QtCore import (
     Qt,
     QSize
@@ -19,7 +17,7 @@ class Model:
         self.dpi = dpi
         self.scale = 1
     
-    def setMap(self, map: map.Map):
+    def setMap(self, map):
         self.map = map
 
     def placeholderFunction():
