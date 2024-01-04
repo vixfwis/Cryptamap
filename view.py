@@ -87,7 +87,7 @@ class ScrollAreaZoom(QScrollArea):
     def wheelEvent(self, event):
         self.model.changeScale(event.angleDelta().y()/120 * 0.1)
 
-        geo = QRect(QPoint(0,0), self.view.widget.map.pixSize*self.model.scale)
+        geo = QRect(QPoint(0,0), self.view.widget.map.size*self.model.scale)
         self.view.widget.imageWr.setGeometry(geo)
         self.view.widget.setGeometry(geo)
         self.view.setGeometry(geo)
