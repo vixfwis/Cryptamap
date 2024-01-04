@@ -6,8 +6,7 @@ import model
 
 from PyQt6.QtGui import (
     QImage,
-    QColor,
-    qRgb
+    QColor
 )
 
 from PyQt6.QtCore import (
@@ -25,39 +24,36 @@ class Map():
     def __init__(self, model: model.Model, *args):
         #super().__init__(*args)
         self.model = model
-        self.dpi = self.model.dpi
-        self.pixSize = self.model.size * self.dpi
-        self.map = bytearray(self.pixSize.width() * self.pixSize.height() * 4)
+        self.size = self.model.size * self.model.dpi
+        self.map = bytearray(self.size.width() * self.size.height() * 4)
 
         self.initMap()
 
     def show(self):
         return QImage(
             self.map,
-            self.pixSize.width(),
-            self.pixSize.height(),
+            self.size.width(),
+            self.size.height(),
             QImage.Format.Format_ARGB32
-        ).scaledToWidth(math.floor(self.pixSize.width()*self.model.scale))
+        ).scaledToWidth(math.floor(self.size.width()*self.model.scale))
+    
+    def pixSet(self, idx: int, color: QColor):
+        self.map[idx+0] = color.blue()
+        self.map[idx+1] = color.green()
+        self.map[idx+2] = color.red()
+        self.map[idx+3] = color.alpha()
+        #print(f"{color.alpha()=}\t{color.red()=}\t{color.green()=}\t{color.blue()=}")
 
     def initMap(self):
         self.fill(self.model.background)
 
-        #self.drawGridLines()
-        self.fillWhite()
+        #self.drawGridLines(self.model.line)
 
-    def drawGridLines(self):
+    def drawGridLines(self, color: QColor):
         print("Draw lines")
-        bits = bytearray(self.bits().asstring(self.width() * self.height() * 4))
+        for idx in range(0, len(self.map), 4 * self.model.dpi):
+            ...
 
     def fill(self, color: QColor):
         for idx in range(0, len(self.map), 4):
-            self.map[idx+0] = color.alpha()
-            self.map[idx+1] = color.red()
-            self.map[idx+2] = color.green()
-            self.map[idx+3] = color.blue()
-
-    def fillWhite(self):
-        self.fill(QColor('white'))
-
-def intFromCol(col: QColor) -> int:
-    return qRgb(col.red(), col.green(), col.blue())
+            self.pixSet(idx, color)
