@@ -48,7 +48,7 @@ class Canvas(QWidget):
 
         screenSize = QApplication.primaryScreen().size()
 
-        self.setGeometry(QRect(QPoint(0, 0), self.map.pixSize))
+        self.setGeometry(QRect(QPoint(0, 0), self.map.size))
         self.setWindowTitle("Drawer")
 
         self.show()
@@ -56,7 +56,7 @@ class Canvas(QWidget):
     def wheelEvent(self, event):
         self.model.changeScale(event.angleDelta().y()/120 * 0.1)
 
-        geo = QRect(QPoint(0,0), self.map.pixSize*self.model.scale)
+        geo = QRect(QPoint(0,0), self.map.size*self.model.scale)
         self.imageWr.setPixmap(QPixmap.fromImage(self.map.show()))
         self.imageWr.setGeometry(geo)
         self.setGeometry(geo)
