@@ -1,11 +1,4 @@
-- todo add scaling from mouse location
+add layers panel on right
 
-``` 
-mousePos = event.position().toPoint() 
-
-print(self.view.scroll.horizontalScrollBar().value())
-
-
-self.view.scroll.horizontalScrollBar().setValue(20)
-self.view.scroll.verticalScrollBar().setValue(20)
-```
+add ability to add layers 
+- connect the dots
