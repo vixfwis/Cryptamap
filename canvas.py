@@ -12,7 +12,8 @@ from PyQt6.QtWidgets import(
     QApplication,
     QLabel,
     QScrollArea,
-    QVBoxLayout
+    QVBoxLayout,
+    QLayout
 )
 from PyQt6.QtGui import(
     QColor,
@@ -42,16 +43,15 @@ class Canvas(QWidget):
         self.initUI()
 
     def initUI(self):
-        self.layout = QVBoxLayout(self)
-        self.layout.setContentsMargins(self.model.margin)
+        self._layout = QVBoxLayout(self)
+        self._layout.setContentsMargins(self.model.margin)
 
         self.imageWr = QLabel("")
         self.imageWr.setPixmap(QPixmap.fromImage(self.map.show()))
-        self.layout.addWidget(self.imageWr)
-
-        self.imageWr.layout = QVBoxLayout(self.imageWr)
-        self.imageWr.layout.setContentsMargins(QMargins())
-        self.imageWr.layout.addWidget(self.overlay)
+        self._layout.addWidget(self.imageWr)
+        self.imageWr._layout = QVBoxLayout(self.imageWr)
+        self.imageWr._layout.setContentsMargins(QMargins())
+        self.imageWr._layout.addWidget(self.overlay)
 
         screenSize = QApplication.primaryScreen().size()
 
@@ -80,6 +80,7 @@ class Canvas(QWidget):
         self.view._scroll.verticalScrollBar().setValue(vsbf)   
 
     def updateGeo(self):
+
         geo = QRect(QPoint(0,0), self.map.size*self.model.scale)
         canvasGeo = QRect(QPoint(0,0), (self.map.size*self.model.scale) + QSize(self.model.netMargin))
         self.overlay.setGeometry(geo)
