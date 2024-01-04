@@ -21,8 +21,7 @@ class COLOURS(Enum):
     blue: 3
 
 class Map():
-    def __init__(self, model: model.Model, *args):
-        #super().__init__(*args)
+    def __init__(self, model: model.Model):
         self.model = model
         self.size = self.model.size * self.model.dpi
         self.map = bytearray(self.size.width() * self.size.height() * 4)
