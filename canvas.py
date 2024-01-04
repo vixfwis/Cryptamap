@@ -1,4 +1,5 @@
 from __future__ import annotations
+import math
 
 import model
 import view
@@ -26,6 +27,7 @@ from PyQt6.QtCore import (
     QSize,
     QRect,
     QPoint,
+    QPointF,
     QMargins
 )
 
@@ -58,7 +60,24 @@ class Canvas(QWidget):
 
     def wheelEvent(self, event: QWheelEvent):
         self.model.changeScale(event.angleDelta().y()/120 * 0.1)
+
+        hsbi = self.view._scroll.horizontalScrollBar().value() # horizontal scroll bar initial
+        vsbi = self.view._scroll.verticalScrollBar().value() # vertical scroll bar inital
+
+        mPos = event.position() + QPointF(hsbi, vsbi) # mouse position on global space
+
+        si = self.size() # inital size
         self.updateGeo()
+        sf = self.size() # final size
+
+        kx = si.width()/sf.width() 
+        ky = si.height()/sf.height()
+
+        hsbf = round(mPos.x()-kx*(mPos.x()-hsbi))
+        vsbf = round(mPos.y()-ky*(mPos.y()-vsbi))
+
+        self.view._scroll.horizontalScrollBar().setValue(hsbf)
+        self.view._scroll.verticalScrollBar().setValue(vsbf)   
 
     def updateGeo(self):
         geo = QRect(QPoint(0,0), self.map.size*self.model.scale)
