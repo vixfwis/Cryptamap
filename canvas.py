@@ -3,6 +3,7 @@ from __future__ import annotations
 import model
 import view
 import map
+import overlay
 
 
 from PyQt6.QtWidgets import(
@@ -13,7 +14,6 @@ from PyQt6.QtWidgets import(
     QVBoxLayout
 )
 from PyQt6.QtGui import(
-    QPainter,
     QColor,
     QFont,
     QPalette,
@@ -35,16 +35,19 @@ class Canvas(QWidget):
         self.view = view
         self.map = map.Map(self.model, self.model.size*self.model.dpi, QImage.Format.Format_ARGB32)
         self.model.setMap(self.map)
+        self.overlay = overlay.Overlay(self.model)
+        self.model.setOverlay(self.overlay)
 
         self.initUI()
 
     def initUI(self):
-        self.text = "YOYOYOY"
         self.layout = QVBoxLayout(self)
 
         self.imageWr = QLabel("")
         self.imageWr.setPixmap(QPixmap.fromImage(self.map.show()))
         self.layout.addWidget(self.imageWr)
+
+        self.overlay.setParent(self.imageWr)
 
         screenSize = QApplication.primaryScreen().size()
 

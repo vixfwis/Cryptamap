@@ -1,4 +1,5 @@
 from __future__ import annotations
+import math
 
 from PyQt6.QtCore import (
     Qt,
@@ -6,11 +7,12 @@ from PyQt6.QtCore import (
 )
 
 from PyQt6.QtGui import (
-    QColor
+    QColor,
+    QPen
 )
 
 class Model:
-    def __init__(self, size: QSize, dpi: int, background: QColor, line: QColor = QColor('white')):
+    def __init__(self, size: QSize, dpi: int, background: QColor, line: QPen = QPen(QColor('white'), 1)):
         self.background = background
         self.line = line
         self.size = size
@@ -19,6 +21,9 @@ class Model:
     
     def setMap(self, map):
         self.map = map
+
+    def setOverlay(self, overlay):
+        self.overlay = overlay
 
     def placeholderFunction():
         print("PLACEHOLDER")
