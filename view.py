@@ -34,14 +34,14 @@ class View(QMainWindow):
         self.layout = QVBoxLayout(self)
         # self.setLayout(self.layout)
 
-        self.scroll = ScrollAreaZoom(self.model, self)
+        self._scroll = ScrollAreaZoom(self.model, self)
         self.widget = Canvas(model, self)
-        self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
-        self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
-        self.scroll.setWidget(self.widget)
+        self._scroll.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
+        self._scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
+        self._scroll.setWidget(self.widget)
 
         self.setWindowTitle("Cryptamap")
-        self.setCentralWidget(self.scroll)
+        self.setCentralWidget(self._scroll)
         self.createToolBar(Qt.ToolBarArea.LeftToolBarArea, "Tools", self)
 
         self.show()
