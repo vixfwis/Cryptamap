@@ -34,9 +34,7 @@ class Canvas(QWidget):
         self.model = model
         self.view = view
         self.map = map.Map(self.model, self.model.size*self.model.dpi, QImage.Format.Format_ARGB32)
-        self.model.setMap(self.map)
         self.overlay = overlay.Overlay(self.model)
-        self.model.setOverlay(self.overlay)
 
         self.initUI()
 
@@ -60,6 +58,7 @@ class Canvas(QWidget):
         self.model.changeScale(event.angleDelta().y()/120 * 0.1)
 
         geo = QRect(QPoint(0,0), self.map.size*self.model.scale)
+        self.overlay.setGeometry(geo)
         self.imageWr.setPixmap(QPixmap.fromImage(self.map.show()))
         self.imageWr.setGeometry(geo)
         self.setGeometry(geo)

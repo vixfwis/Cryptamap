@@ -26,6 +26,7 @@ class Map():
         self.model = model
         self.size = self.model.size * self.model.dpi
         self.map = bytearray(self.size.width() * self.size.height() * 4)
+        self.model.setMap(self)
 
         self.initMap()
 
