@@ -26,7 +26,6 @@ class Overlay(QWidget):
         self.model = model
         self.model.setOverlay(self)
 
-
     def paintEvent(self, event: QPaintEvent):
         qp = QPainter(self)
 
@@ -41,8 +40,7 @@ class Overlay(QWidget):
         mapHeight = self.model.size.height() * self.model.dpi * self.model.scale
 
         for x in range(1, self.model.size.width()):
-            #print(f"{self.width()=}\t{qp.device().width()=}\t{mapWidth=}")
-            pX = x*self.model.dpi*self.model.scale
+            pX = x*mapWidth/(self.model.size.width())
             qp.drawLine(QLineF(
                 pX, 0,
                 pX, mapHeight

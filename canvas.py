@@ -18,14 +18,15 @@ from PyQt6.QtGui import(
     QFont,
     QPalette,
     QImage,
-    QPixmap
-    
+    QPixmap,
+    QWheelEvent
 )
 from PyQt6.QtCore import (
     Qt,
     QSize,
     QRect,
-    QPoint
+    QPoint,
+    QMargins
 )
 
 class Canvas(QWidget):
@@ -33,33 +34,36 @@ class Canvas(QWidget):
         super().__init__()
         self.model = model
         self.view = view
-        self.map = map.Map(self.model, self.model.size*self.model.dpi, QImage.Format.Format_ARGB32)
+        self.map = map.Map(self.model)
         self.overlay = overlay.Overlay(self.model)
 
         self.initUI()
 
     def initUI(self):
         self.layout = QVBoxLayout(self)
+        self.layout.setContentsMargins(self.model.margin)
 
         self.imageWr = QLabel("")
         self.imageWr.setPixmap(QPixmap.fromImage(self.map.show()))
         self.layout.addWidget(self.imageWr)
 
-        self.overlay.setParent(self.imageWr)
+        self.imageWr.layout = QVBoxLayout(self.imageWr)
+        self.imageWr.layout.setContentsMargins(QMargins())
+        self.imageWr.layout.addWidget(self.overlay)
 
         screenSize = QApplication.primaryScreen().size()
 
         self.setGeometry(QRect(QPoint(0, 0), self.map.size))
         self.setWindowTitle("Drawer")
 
-        self.show()
-
-    def wheelEvent(self, event):
+    def wheelEvent(self, event: QWheelEvent):
         self.model.changeScale(event.angleDelta().y()/120 * 0.1)
+        self.updateGeo()
 
+    def updateGeo(self):
         geo = QRect(QPoint(0,0), self.map.size*self.model.scale)
+        canvasGeo = QRect(QPoint(0,0), (self.map.size*self.model.scale) + QSize(self.model.netMargin))
         self.overlay.setGeometry(geo)
         self.imageWr.setPixmap(QPixmap.fromImage(self.map.show()))
         self.imageWr.setGeometry(geo)
-        self.setGeometry(geo)
-        print(self.model.scale)
+        self.setGeometry(canvasGeo)

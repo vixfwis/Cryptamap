@@ -13,7 +13,8 @@ from PyQt6.QtGui import (
 
 from PyQt6.QtCore import(
     Qt,
-    QSize
+    QSize,
+    QMargins
 )
 
 from view import View
@@ -24,7 +25,8 @@ def main():
     model = Model(
         size = QSize(30,20),
         dpi = 72,
-        background = QColor('black')
+        background = QColor('black'),
+        margin = QMargins(4,4,4,4)
     )
     view = View(model)
     view.show()
