@@ -21,10 +21,6 @@ class Overlay(QWidget):
         super().__init__()
         self.model = model
 
-        self.setAttribute(Qt.WidgetAttribute.WA_NoSystemBackground, True)
-        self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground, True)
-
-        #self.show()
 
     def paintEvent(self, event: QPaintEvent):
         qp = QPainter(self)
