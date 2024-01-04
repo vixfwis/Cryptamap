@@ -45,6 +45,7 @@ class View(QMainWindow):
         self.createToolBar(Qt.ToolBarArea.LeftToolBarArea, "Tools", self)
 
         self.show()
+        self.widget.updateGeo()
 
     def createToolBar(self, location, *args):
         self.toolBar = QToolBar(*args)
@@ -77,6 +78,7 @@ class View(QMainWindow):
                 buttons.update({button: action})
 
         return buttons
+    
     
 class ScrollAreaZoom(QScrollArea):
     def __init__(self, model: Model, view: View, *args, **kwargs):
