@@ -1,7 +1,6 @@
 import yaml
 
 from canvas import Canvas
-# from map import Map
 from model import Model
 
 from PyQt6.QtWidgets import (
