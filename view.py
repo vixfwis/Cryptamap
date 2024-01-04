@@ -17,6 +17,7 @@ from PyQt6.QtGui import (
     QFont,
     QAction,
     QIcon,
+    QResizeEvent,
     QWheelEvent
 )
 from PyQt6.QtCore import (
@@ -30,14 +31,13 @@ class View(QMainWindow):
     def __init__(self, model: Model):
         super().__init__(parent=None)
         self.model = model
+        self.model.setView(self)
 
         self.layout = QVBoxLayout(self)
         # self.setLayout(self.layout)
 
         self._scroll = ScrollAreaZoom(self.model, self)
         self.widget = Canvas(model, self)
-        self._scroll.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
-        self._scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
         self._scroll.setWidget(self.widget)
 
         self.setWindowTitle("Cryptamap")
@@ -85,6 +85,9 @@ class ScrollAreaZoom(QScrollArea):
         super().__init__(*args, **kwargs)
         self.view = view
         self.model = model
+
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
 
     def wheelEvent(self, event):
         QApplication.sendEvent(self.widget(), event)

@@ -19,6 +19,7 @@ class Model:
         self.line = line
         self.size = size
         self.dpi = dpi
+        self.pixSize = self.size * self.dpi
         self.scale = 1
 
         self.netMargin = QSize(self.margin.top()+self.margin.bottom(), self.margin.left()+self.margin.right())
@@ -28,6 +29,9 @@ class Model:
 
     def setOverlay(self, overlay):
         self.overlay = overlay
+    
+    def setView(self, view):
+        self.view = view
 
     def placeholderFunction():
         print("PLACEHOLDER")
