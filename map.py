@@ -42,17 +42,9 @@ class Map():
         self.map[idx+1] = color.green()
         self.map[idx+2] = color.red()
         self.map[idx+3] = color.alpha()
-        #print(f"{color.alpha()=}\t{color.red()=}\t{color.green()=}\t{color.blue()=}")
 
     def initMap(self):
         self.fill(self.model.background)
-
-        #self.drawGridLines(self.model.line)
-
-    def drawGridLines(self, color: QColor):
-        print("Draw lines")
-        for idx in range(0, len(self.map), 4 * self.model.dpi):
-            ...
 
     def fill(self, color: QColor):
         for idx in range(0, len(self.map), 4):
