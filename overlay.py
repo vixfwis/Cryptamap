@@ -36,8 +36,8 @@ class Overlay(QWidget):
         pen = self.model.line
         qp.setPen(pen)
 
-        mapWidth = self.model.size.width() * self.model.dpi * self.model.scale
-        mapHeight = self.model.size.height() * self.model.dpi * self.model.scale
+        mapWidth = self.model.pixSize.width() * self.model.scale
+        mapHeight = self.model.pixSize.height() * self.model.scale
 
         for x in range(1, self.model.size.width()):
             pX = x*mapWidth/(self.model.size.width())
