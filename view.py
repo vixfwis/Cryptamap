@@ -9,7 +9,9 @@ from PyQt6.QtWidgets import (
     QWidget,
     QToolBar,
     QScrollArea,
-    QVBoxLayout
+    QVBoxLayout,
+    QHBoxLayout,
+    QLabel
 )
 from PyQt6.QtGui import (
     QPainter,
@@ -24,7 +26,8 @@ from PyQt6.QtCore import (
     Qt,
     QSize,
     QRect,
-    QPoint
+    QPoint,
+    pyqtSlot
 )
 
 class View(QMainWindow):
@@ -33,18 +36,22 @@ class View(QMainWindow):
         self.model = model
         self.model.setView(self)
 
-        self.layout = QVBoxLayout(self)
-        # self.setLayout(self.layout)
+        self.contents = QWidget()
+        self.layout = QHBoxLayout(self.contents)
+        self.contents.setLayout(self.layout)
+        self.setCentralWidget(self.contents)
 
         self._scroll = ScrollAreaZoom(self.model, self)
         self.widget = Canvas(model, self)
         self._scroll.setWidget(self.widget)
 
         self.setWindowTitle("Cryptamap")
-        self.setCentralWidget(self._scroll)
+        self.layout.addWidget(self._scroll)
         self.createToolBar(Qt.ToolBarArea.LeftToolBarArea, "Tools", self)
 
+        self.layout.addWidget(QLabel("Hello"))
         self.show()
+        self.contents.show()
         self.widget.updateGeo()
 
     def createToolBar(self, location, *args):
@@ -53,11 +60,11 @@ class View(QMainWindow):
 
         buttons = self.createButtonsFromYAML(".\\icons\\icons.yaml")
         
-        for button in buttons.values():
+        for button in buttons:
             self.toolBar.addAction(button)
 
     def createButtonsFromYAML(self, path: str):
-        buttons = {}
+        buttons = []
         with open(path, "r") as stream:
             try:
                 buttonDef = yaml.safe_load(stream)
@@ -70,12 +77,13 @@ class View(QMainWindow):
                     button,
                     self
                 )
-                action.triggered.connect(getattr(Model, props["func"]))
+                func = getattr(Model, props["func"])
+                action.triggered.connect(lambda _: func(self.model))
                 action.setStatusTip(props["desc"])
                 if "shortcut" in props:
                     action.setShortcut(props["shortcut"])
 
-                buttons.update({button: action})
+                buttons.append(action)
 
         return buttons
     

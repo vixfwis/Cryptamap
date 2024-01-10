@@ -1,6 +1,7 @@
 import model
 
 import math
+from enum import Enum
 
 from PyQt6.QtWidgets import(
     QWidget
@@ -17,7 +18,8 @@ from PyQt6.QtGui import(
 
 from PyQt6.QtCore import (
     Qt,
-    QLineF
+    QLineF,
+    QPoint
 )
 
 class Overlay(QWidget):
@@ -30,6 +32,7 @@ class Overlay(QWidget):
         qp = QPainter(self)
 
         self.drawGrid(qp)
+        self.drawPoints(qp)
 
 
     def drawGrid(self, qp: QPainter):
@@ -52,3 +55,13 @@ class Overlay(QWidget):
                 0, pY,
                 mapWidth, pY
             ))
+
+    def drawPoints(self, qp: QPainter):
+        pen = QPen(self.model.line)
+        pen.setWidth(pen.width()+4)
+        qp.setPen(pen)
+
+        # draw corners 
+        for y in range(self.model.size.height() + 1):
+            for x in range(self.model.size.width() + 1):
+                qp.drawPoint(QPoint(x,y)*self.model.dpi*self.model.scale)

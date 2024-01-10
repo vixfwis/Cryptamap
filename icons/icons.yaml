@@ -1,7 +1,7 @@
 add_layer:
   desc: "Add a layer above current selected layer"
   iconPath: ".\\icons\\plus-circle.svg"
-  func: "placeholderFunction"
+  func: "addLayer"
 
 del_layer:
   desc: "Delete curret layer"
