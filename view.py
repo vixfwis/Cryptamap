@@ -1,4 +1,5 @@
 import yaml
+import functools
 
 from canvas import Canvas
 from model import Model
@@ -78,7 +79,7 @@ class View(QMainWindow):
                     self
                 )
                 func = getattr(Model, props["func"])
-                action.triggered.connect(lambda _: func(self.model))
+                action.triggered.connect(functools.partial(func, self.model))
                 action.setStatusTip(props["desc"])
                 if "shortcut" in props:
                     action.setShortcut(props["shortcut"])
