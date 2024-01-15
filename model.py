@@ -2,7 +2,8 @@ from __future__ import annotations
 import math
 
 from PyQt6.QtWidgets import (
-    QWidget
+    QWidget,
+    QListWidgetItem
 )
 
 from PyQt6.QtCore import (
@@ -54,23 +55,22 @@ class Model(QObject):
         self.view = view
 
     def placeholderFunction(self):
-        print(f"PLACEHOLDER of {self}")
+        print(f"PLACEHOLDER")
 
     def changeScale(self, scaleFac):
         if self.scale >= 0.15 or scaleFac > 0:
             self.scale += scaleFac
 
     def addLayer(self, location: int | None = None, res: int = 1):
-        print(f"Add layer {self}")
+        print(len(self.layers))
         layer = Layer(model = self)
 
         if not location:
             self.setActiveLayer(len(self.layers))
             self.layers.append(layer)
-            return 
-
-        self.layers.insert(location, layer)
-        self.setActiveLayer(location)
+        else:
+            self.layers.insert(location, layer)
+            self.setActiveLayer(location)
 
     def setActiveLayer(self, idx: int):
         self.activeLayer = idx
