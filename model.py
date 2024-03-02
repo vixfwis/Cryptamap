@@ -3,7 +3,12 @@ import math
 
 from PyQt6.QtWidgets import (
     QWidget,
-    QListWidgetItem
+    QListWidget,
+    QListWidgetItem,
+    QLabel,
+    QPushButton,
+    QHBoxLayout,
+    QSizePolicy
 )
 
 from PyQt6.QtCore import (
@@ -63,22 +68,41 @@ class Model(QObject):
 
     def addLayer(self, location: int | None = None, res: int = 1):
         print(len(self.layers))
-        layer = Layer(model = self)
+        loc = location if location else len(self.layers)
 
-        if not location:
-            self.setActiveLayer(len(self.layers))
-            self.layers.append(layer)
-        else:
-            self.layers.insert(location, layer)
-            self.setActiveLayer(location)
+        layer = Layer(model = self, location = loc)
+        self.setActiveLayer(loc)
+        self.layers.insert(loc, layer)
+
+        listWidget = QListWidgetItem()
+        
+        listItem = QWidget()
+        listLayout = QHBoxLayout()
+        
+        listText = QLabel(layer.name)
+        listLayout.addWidget(listText, alignment=Qt.AlignmentFlag.AlignLeft)
+
+        listButton = QPushButton("TEST TEST TEST")
+        listLayout.addWidget(listButton, alignment=Qt.AlignmentFlag.AlignRight)
+
+        listLayout.addStretch()
+        listLayout.setSizeConstraint(QHBoxLayout.SizeConstraint.SetFixedSize)
+        listItem.setLayout(listLayout)
+        listWidget.setSizeHint(listItem.sizeHint())
+
+        self.view.list.addItem(listWidget)
+        self.view.list.setItemWidget(listWidget, listItem)
+        
 
     def setActiveLayer(self, idx: int):
         self.activeLayer = idx
 
 class Layer:
-    def __init__(self, model: Model, res: int = 1):
+    def __init__(self, model: Model, res: int = 1, name: str = None, location: int = None):
         self.model = model
         self.res = res
+        self.name = name if name else f"Layer {len(self.model.layers)}"
+        self.location = location
         
         self.rows = self.model.size.width()*self.res + 1
         self.columns = self.model.size.height()*self.res+1
@@ -101,6 +125,9 @@ class Layer:
     
     def idxAt(self, x, y) -> int:
         return y*self.rows + x
+    
+    def createListWidgetItem() -> QListWidgetItem:
+        return
         
 
 class Point:

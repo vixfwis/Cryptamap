@@ -13,7 +13,7 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QHBoxLayout,
     QLabel,
-    QListView
+    QListWidget
 )
 from PyQt6.QtGui import (
     QPainter,
@@ -51,10 +51,11 @@ class View(QMainWindow):
         self.layout.addWidget(self._scroll)
         self.createToolBar(Qt.ToolBarArea.LeftToolBarArea, "Tools", self)
 
-        self.list = QListView()
+        self.list = QListWidget()
+        self.list.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.layout.addWidget(self.list)
+
         self.show()
-        self.contents.show()
         self.widget.updateGeo()
 
     def createToolBar(self, location, *args):
