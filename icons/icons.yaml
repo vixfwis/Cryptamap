@@ -7,3 +7,8 @@ del_layer:
   desc: "Delete curret layer"
   iconPath: ".\\icons\\minus-circle.svg"
   func: "deleteLayer"
+
+edit_mesh:
+  desc: "Edit layer mesh"
+  iconPath: ".\\icons\\mesh-points.svg"
+  func: "placeholderFunction"
