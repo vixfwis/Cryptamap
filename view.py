@@ -52,6 +52,7 @@ class View(QMainWindow):
         self.createToolBar(Qt.ToolBarArea.LeftToolBarArea, "Tools", self)
 
         self.list = QListWidget()
+        self.list.currentRowChanged.connect(functools.partial(self.model.setActiveLayer))
         self.list.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.layout.addWidget(self.list)
 

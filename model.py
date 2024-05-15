@@ -1,4 +1,5 @@
 from __future__ import annotations
+from functools import partial
 import math
 
 from PyQt6.QtWidgets import (
@@ -83,6 +84,7 @@ class Model(QObject):
         listLayout.addWidget(listText, alignment=Qt.AlignmentFlag.AlignLeft)
 
         listButton = QPushButton("TEST TEST TEST")
+        listButton.clicked.connect(partial(self.placeholderFunction))
         listLayout.addWidget(listButton, alignment=Qt.AlignmentFlag.AlignRight)
 
         listLayout.addStretch()
@@ -93,9 +95,20 @@ class Model(QObject):
         self.view.list.addItem(listWidget)
         self.view.list.setItemWidget(listWidget, listItem)
         
-
     def setActiveLayer(self, idx: int):
+        print(f"{idx=}")
+        if idx < 0:
+            self.activeLayer = None
+            return
         self.activeLayer = idx
+
+    def deleteLayer(self, location: int | None = None):
+        if location == None or location == False:
+            location = self.activeLayer
+            
+        self.layers.pop(location)
+        self.setActiveLayer(location-1)
+        self.view.list.removeItemWidget(self.view.list.item(location))
 
 class Layer:
     def __init__(self, model: Model, res: int = 1, name: str = None, location: int = None):

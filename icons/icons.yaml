@@ -6,4 +6,4 @@ add_layer:
 del_layer:
   desc: "Delete curret layer"
   iconPath: ".\\icons\\minus-circle.svg"
-  func: "placeholderFunction"
+  func: "deleteLayer"
