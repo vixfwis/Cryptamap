@@ -108,7 +108,7 @@ class Model(QObject):
             
         self.layers.pop(location)
         self.setActiveLayer(location-1)
-        self.view.list.removeItemWidget(self.view.list.item(location))
+        self.view.list.takeItem(location)
 
 class Layer:
     def __init__(self, model: Model, res: int = 1, name: str = None, location: int = None):
