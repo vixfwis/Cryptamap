@@ -99,7 +99,6 @@ class Overlay(QWidget):
         if event.buttons() == Qt.MouseButton.LeftButton:
             match self.model.mode:
                 case model.Mode.VIEW:
-                    #print("testing")
                     self.model.viewTranslate(prevPos - self.mousePos)
                 case model.Mode.MESHEDIT:
                     self.model.pointIncAt(self.mousePos)

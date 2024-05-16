@@ -141,7 +141,6 @@ class Model(QObject):
         hsbi = self.view._scroll.horizontalScrollBar().value() # horizontal scroll bar initial
         vsbi = self.view._scroll.verticalScrollBar().value() # vertical scroll bar inital
 
-        print(f"{scroll=}")
         hsbf = math.floor(hsbi + scroll.x())
         vsbf = math.floor(vsbi + scroll.y())
 
