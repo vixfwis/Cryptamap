@@ -26,6 +26,10 @@ from PyQt6.QtCore import (
     QPointF
 )
 
+drawCursor = {
+    model.Mode.MESHEDIT: True
+}
+
 class Overlay(QWidget):
     def __init__(self, model: model.Model):
         super().__init__()
@@ -39,7 +43,8 @@ class Overlay(QWidget):
 
         self.drawGrid(qp)
         self.drawPoints(qp)
-        self.drawCursor(qp)
+        if drawCursor.get(self.model.mode, False):
+            self.drawCursor(qp)
 
     def drawGrid(self, qp: QPainter):
         pen = self.model.line
@@ -88,10 +93,16 @@ class Overlay(QWidget):
 
     #Events
     def mouseMoveEvent(self, event: QMouseEvent):
-        self.mousePos = event.position()
+        prevPos = self.mousePos
+        self.mousePos = event.globalPosition()
 
         if event.buttons() == Qt.MouseButton.LeftButton:
-            self.model.pointIncAt(self.mousePos)
+            match self.model.mode:
+                case model.Mode.VIEW:
+                    #print("testing")
+                    self.model.viewTranslate(prevPos - self.mousePos)
+                case model.Mode.MESHEDIT:
+                    self.model.pointIncAt(self.mousePos)
 
         self.repaint()
         return super().mouseMoveEvent(event)

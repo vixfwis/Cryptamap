@@ -1,6 +1,7 @@
 from __future__ import annotations
 from functools import partial
 import math
+from enum import Enum
 
 from PyQt6.QtWidgets import (
     QWidget,
@@ -26,6 +27,10 @@ from PyQt6.QtGui import (
     QColor,
     QPen
 )
+
+class Mode(Enum):
+    VIEW = 0
+    MESHEDIT = 1
 
 class Model(QObject):
     def __init__(self, 
@@ -57,6 +62,8 @@ class Model(QObject):
 
         self.layers = []
         self.activeLayer = None
+
+        self.mode = Mode.VIEW
     
     def setMap(self, map):
         self.map = map
@@ -129,6 +136,26 @@ class Model(QObject):
                     #print("Found")
             else:
                 point.found = False
+
+    def viewTranslate(self, scroll: QPointF):
+        hsbi = self.view._scroll.horizontalScrollBar().value() # horizontal scroll bar initial
+        vsbi = self.view._scroll.verticalScrollBar().value() # vertical scroll bar inital
+
+        print(f"{scroll=}")
+        hsbf = math.floor(hsbi + scroll.x())
+        vsbf = math.floor(vsbi + scroll.y())
+
+        self.view._scroll.horizontalScrollBar().setValue(hsbf)
+        self.view._scroll.verticalScrollBar().setValue(vsbf)   
+
+    def setMode(self, mode: Mode):
+        self.mode = mode
+
+    def setMode_MeshEdit(self):
+        self.setMode(Mode.MESHEDIT)
+    
+    def setMode_View(self):
+        self.setMode(Mode.VIEW)
 
 class Layer:
     def __init__(self, model: Model, res: int = 1, name: str = None, location: int = None):

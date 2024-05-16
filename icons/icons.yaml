@@ -8,7 +8,12 @@ del_layer:
   iconPath: ".\\icons\\minus-circle.svg"
   func: "deleteLayer"
 
+view:
+  desc: "View layers"
+  iconPath: ".\\icons\\view.svg"
+  func: "setMode_View"
+
 edit_mesh:
   desc: "Edit layer mesh"
   iconPath: ".\\icons\\mesh-points.svg"
-  func: "placeholderFunction"
+  func: "setMode_MeshEdit"
