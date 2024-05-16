@@ -58,6 +58,8 @@ class Model(QObject):
         self.cursorSize = cursorSize
         self.strength = strength
 
+        self.mousePos = QPointF(0,0)
+
         self.netMargin = QSize(self.margin.top()+self.margin.bottom(), self.margin.left()+self.margin.right())
 
         self.layers = []

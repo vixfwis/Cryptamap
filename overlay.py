@@ -93,15 +93,16 @@ class Overlay(QWidget):
 
     #Events
     def mouseMoveEvent(self, event: QMouseEvent):
-        prevPos = self.mousePos
-        self.mousePos = event.globalPosition()
+        self.mousePos = event.position()
 
         if event.buttons() == Qt.MouseButton.LeftButton:
             match self.model.mode:
                 case model.Mode.VIEW:
-                    self.model.viewTranslate(prevPos - self.mousePos)
+                    self.model.viewTranslate(self.model.mousePos - event.globalPosition())
                 case model.Mode.MESHEDIT:
                     self.model.pointIncAt(self.mousePos)
+        
+        self.model.mousePos = event.globalPosition()
 
         self.repaint()
         return super().mouseMoveEvent(event)
