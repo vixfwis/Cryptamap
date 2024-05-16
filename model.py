@@ -18,7 +18,8 @@ from PyQt6.QtCore import (
     QMargins,
     QPoint,
     QObject,
-    pyqtSlot
+    pyqtSlot,
+    QPointF
 )
 
 from PyQt6.QtGui import (
@@ -34,6 +35,9 @@ class Model(QObject):
                  line: QPen = QPen(QColor('white'), 1),
                  pointOff: QPen = QPen(QColor('blue'), 8), 
                  pointOn: QPen = QPen(QColor('red'), 8), 
+                 cursor: QPen = QPen(QColor('gray'), 2, Qt.PenStyle.DashLine),
+                 cursorSize: int = 20,
+                 strength: float = 0.1,
                  margin: QMargins = QMargins(4,4,4,4)
                  ):
         self.background = background
@@ -45,6 +49,9 @@ class Model(QObject):
         self.scale = 1
         self.pointOff = pointOff
         self.pointOn = pointOn
+        self.cursor = cursor
+        self.cursorSize = cursorSize
+        self.strength = strength
 
         self.netMargin = QSize(self.margin.top()+self.margin.bottom(), self.margin.left()+self.margin.right())
 
@@ -72,8 +79,6 @@ class Model(QObject):
         loc = location if location else len(self.layers)
 
         layer = Layer(model = self, location = loc)
-        self.setActiveLayer(loc)
-        self.layers.insert(loc, layer)
 
         listWidget = QListWidgetItem()
         
@@ -94,6 +99,9 @@ class Model(QObject):
 
         self.view.list.addItem(listWidget)
         self.view.list.setItemWidget(listWidget, listItem)
+
+        self.setActiveLayer(loc)
+        self.layers.insert(loc, layer)
         
     def setActiveLayer(self, idx: int):
         print(f"{idx=}")
@@ -101,6 +109,8 @@ class Model(QObject):
             self.activeLayer = None
             return
         self.activeLayer = idx
+        
+        self.model.overlay.repaint()
 
     def deleteLayer(self, location: int | None = None):
         if location == None or location == False:
@@ -109,6 +119,16 @@ class Model(QObject):
         self.layers.pop(location)
         self.setActiveLayer(location-1)
         self.view.list.takeItem(location)
+
+    def pointIncAt(self, location: QPointF):
+        for point in self.layers[self.activeLayer].pointList:
+            if (location.x() - point.x*self.dpi)**2 + (location.y() - point.y*self.dpi)**2 <= self.cursorSize**2:
+                if point.found == False:
+                    point.val += self.strength
+                    point.found = True
+                    #print("Found")
+            else:
+                point.found = False
 
 class Layer:
     def __init__(self, model: Model, res: int = 1, name: str = None, location: int = None):
@@ -148,3 +168,7 @@ class Point:
         self.x = x
         self.y = y
         self.val = val
+        self.found = False
+
+    def __repr__(self):
+        return f"x: {self.x}\ty: {self.y}\tval: {self.val}"

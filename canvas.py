@@ -79,6 +79,8 @@ class Canvas(QWidget):
         self.view._scroll.horizontalScrollBar().setValue(hsbf)
         self.view._scroll.verticalScrollBar().setValue(vsbf)   
 
+        self.model.overlay.repaint()
+
     def updateGeo(self):
 
         geo = QRect(QPoint(0,0), self.map.size*self.model.scale)

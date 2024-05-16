@@ -54,6 +54,7 @@ class View(QMainWindow):
         self.list = QListWidget()
         self.list.currentRowChanged.connect(functools.partial(self.model.setActiveLayer))
         self.list.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.model.addLayer()
         self.layout.addWidget(self.list)
 
         self.show()
