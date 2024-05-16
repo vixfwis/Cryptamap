@@ -100,8 +100,8 @@ class Model(QObject):
         self.view.list.addItem(listWidget)
         self.view.list.setItemWidget(listWidget, listItem)
 
-        self.setActiveLayer(loc)
         self.layers.insert(loc, layer)
+        self.setActiveLayer(loc)
         
     def setActiveLayer(self, idx: int):
         print(f"{idx=}")
@@ -110,7 +110,7 @@ class Model(QObject):
             return
         self.activeLayer = idx
         
-        self.model.overlay.repaint()
+        self.overlay.repaint()
 
     def deleteLayer(self, location: int | None = None):
         if location == None or location == False:
