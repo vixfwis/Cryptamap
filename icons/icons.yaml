@@ -17,3 +17,13 @@ edit_mesh:
   desc: "Edit layer mesh"
   iconPath: ".\\icons\\mesh-points.svg"
   func: "setMode_MeshEdit"
+
+inc_dir_plus:
+  desc: "Set brush to increase points"
+  iconPath: ".\\icons\\increase.svg"
+  func: "setIncDir_Plus"
+
+inc_dir_minus:
+  desc: "Set brush to decrease points"
+  iconPath: ".\\icons\\decrease.svg"
+  func: "setIncDir_Minus"

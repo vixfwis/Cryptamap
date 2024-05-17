@@ -80,7 +80,7 @@ class View(QMainWindow):
             for button, props in buttonDef.items():
                 action = QAction(
                     QIcon(props["iconPath"]),
-                    button,
+                    props["desc"],
                     self
                 )
                 func = getattr(Model, props["func"])

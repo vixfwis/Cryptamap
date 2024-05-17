@@ -57,6 +57,7 @@ class Model(QObject):
         self.cursor = cursor
         self.cursorSize = cursorSize
         self.strength = strength
+        self.incDir = 1
 
         self.mousePos = QPointF(0,0)
 
@@ -82,6 +83,15 @@ class Model(QObject):
     def changeScale(self, scaleFac):
         if self.scale >= 0.15 or scaleFac > 0:
             self.scale += scaleFac
+
+    def setIncDir(self, sign: int):
+        self.incDir = sign
+
+    def setIncDir_Plus(self):
+        self.setIncDir(1)
+    
+    def setIncDir_Minus(self):
+        self.setIncDir(-1)
 
     def addLayer(self, location: int | None = None, res: int = 1):
         print(len(self.layers))
@@ -133,7 +143,8 @@ class Model(QObject):
         for point in self.layers[self.activeLayer].pointList:
             if (location.x() - point.x*self.dpi)**2 + (location.y() - point.y*self.dpi)**2 <= self.cursorSize**2:
                 if point.found == False:
-                    point.val += self.strength
+                    point.val += self.strength*self.incDir
+                    point.val = min(max(point.val, 0), 1)
                     point.found = True
                     #print("Found")
             else:
