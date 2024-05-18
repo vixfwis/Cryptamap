@@ -1,7 +1,7 @@
 from __future__ import annotations
 from functools import partial
 import math
-from enum import Enum
+from enum import IntEnum
 
 from PyQt6.QtWidgets import (
     QWidget,
@@ -10,6 +10,7 @@ from PyQt6.QtWidgets import (
     QLabel,
     QPushButton,
     QHBoxLayout,
+    QComboBox,
     QSizePolicy
 )
 
@@ -20,7 +21,8 @@ from PyQt6.QtCore import (
     QPoint,
     QObject,
     pyqtSlot,
-    QPointF
+    QPointF,
+    QStringConverter
 )
 
 from PyQt6.QtGui import (
@@ -28,7 +30,7 @@ from PyQt6.QtGui import (
     QPen
 )
 
-class Mode(Enum):
+class Mode(IntEnum):
     VIEW = 0
     MESHEDIT = 1
 
@@ -149,12 +151,17 @@ class Model(QObject):
     def setMode_View(self):
         self.setMode(Mode.VIEW)
 
+class MesherType(IntEnum):
+    SIMPLE_MESH = 0
+    MARCHING_SQUARES = 1
+
 class Layer:
     def __init__(self, model: Model, res: int = 1, name: str = None, location: int = None):
         self.model = model
         self.res = res
         self.name = name if name else f"Layer {len(self.model.layers)}"
         self.location = location
+        self.mesherType = MesherType.SIMPLE_MESH
 
         self.mesh = []
         
@@ -195,8 +202,16 @@ class Layer:
         listLayout.addWidget(listText, alignment=Qt.AlignmentFlag.AlignLeft)
 
         mesher = QPushButton("Mesh")
-        mesher.clicked.connect(self.createSimpleMesh)
+        mesher.clicked.connect(self.createMesh)
         listLayout.addWidget(mesher, alignment=Qt.AlignmentFlag.AlignRight)
+
+        meshType = QComboBox()
+        meshType.addItems([
+            "Simple Mesh",
+            "Marching Squares"
+        ])
+        meshType.currentIndexChanged.connect(self.changeMesher)
+        listLayout.addWidget(meshType)
 
         listLayout.addStretch()
         listLayout.setSizeConstraint(QHBoxLayout.SizeConstraint.SetFixedSize)
@@ -205,6 +220,18 @@ class Layer:
 
         self.model.view.list.addItem(listWidget)
         self.model.view.list.setItemWidget(listWidget, listItem)
+
+    def changeMesher(self, idx):
+        self.mesherType = idx
+
+    def createMesh(self):
+        if self.mesherType == MesherType.SIMPLE_MESH:
+            self.createSimpleMesh()
+        elif self.mesherType == MesherType.MARCHING_SQUARES: 
+            self.createMSMesh()
+
+        else:
+            raise NotImplementedError
 
     def createSimpleMesh(self):
         self.mesh = []
@@ -228,6 +255,9 @@ class Layer:
                     pass
 
         self.model.map.renderMesh(self)
+
+    def createMSMesh(self):
+        print("MESHING NOT REALLY")
 
 class Point:
     def __init__(self, x: int, y: int, val: float = 0):
