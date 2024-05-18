@@ -44,8 +44,8 @@ class View(QMainWindow):
         self.setCentralWidget(self.contents)
 
         self._scroll = ScrollAreaZoom(self.model, self)
-        self.widget = Canvas(model, self)
-        self._scroll.setWidget(self.widget)
+        self.canvas = Canvas(model, self)
+        self._scroll.setWidget(self.canvas)
 
         self.setWindowTitle("Cryptamap")
         self.layout.addWidget(self._scroll)
@@ -58,7 +58,7 @@ class View(QMainWindow):
         self.layout.addWidget(self.list)
 
         self.show()
-        self.widget.updateGeo()
+        self.canvas.updateGeo()
 
     def createToolBar(self, location, *args):
         self.toolBar = QToolBar(*args)

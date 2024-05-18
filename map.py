@@ -6,7 +6,8 @@ import model
 
 from PyQt6.QtGui import (
     QImage,
-    QColor
+    QColor,
+    QPixmap
 )
 
 from PyQt6.QtCore import (
@@ -58,21 +59,18 @@ class Map():
                 if self.inTri(x,y, tri):
                     self.pixSet(idx, QColor('white'))
 
-        self.show()
+        self.model.view.canvas.imageWr.setPixmap(QPixmap.fromImage(self.show()))
 
 
-    def inTri(self, x,y, tri): #https://www.geeksforgeeks.org/check-whether-a-given-point-lies-inside-a-triangle-or-not/
+    def inTri(self, x,y, tri): # https://www.geeksforgeeks.org/check-whether-a-given-point-lies-inside-a-triangle-or-not/
         A = (tri[0].x * self.model.dpi , tri[0].y * self.model.dpi)
         B = (tri[1].x * self.model.dpi , tri[1].y * self.model.dpi)
         C = (tri[2].x * self.model.dpi , tri[2].y * self.model.dpi)
         P = (x,y)
 
-        denominator = ((B[1] - C[1]) * (A[0] - C[0]) +
-                    (C[0] - B[0]) * (A[1] - C[1]))
-        a = ((B[1] - C[1]) * (P[0] - C[0]) +
-            (C[0] - B[0]) * (P[1] - C[1])) / denominator
-        b = ((C[1] - A[1]) * (P[0] - C[0]) +
-            (A[0] - C[0]) * (P[1] - C[1])) / denominator
+        denominator = ((B[1] - C[1]) * (A[0] - C[0]) + (C[0] - B[0]) * (A[1] - C[1]))
+        a = ((B[1] - C[1]) * (P[0] - C[0]) + (C[0] - B[0]) * (P[1] - C[1])) / denominator
+        b = ((C[1] - A[1]) * (P[0] - C[0]) + (A[0] - C[0]) * (P[1] - C[1])) / denominator
         c = 1 - a - b
     
         if a >= 0 and b >= 0 and c >= 0:
