@@ -1,4 +1,4 @@
-from __future__ import annotations
+""" from __future__ import annotations
 from functools import partial
 import math
 
@@ -43,6 +43,8 @@ class Layer:
             x,y = self.xyAt(i)
             self.pointList[i] = Point(x, y)
 
+        self.createLayer()
+
     def getPoint(self, idx: int) -> Point:
         return self.pointList[idx]
     
@@ -60,18 +62,18 @@ class Layer:
     def createListWidgetItem() -> QListWidgetItem:
         return
     
-    def createLayer(self, layer: Layer):
+    def createLayer(self):
         listWidget = QListWidgetItem()
         
         listItem = QWidget()
         listLayout = QHBoxLayout()
         
-        listText = QLabel(layer.name)
+        listText = QLabel(self.name)
         listLayout.addWidget(listText, alignment=Qt.AlignmentFlag.AlignLeft)
 
-        listButton = QPushButton("TEST TEST TEST")
-        listButton.clicked.connect(partial(self.placeholderFunction))
-        listLayout.addWidget(listButton, alignment=Qt.AlignmentFlag.AlignRight)
+        mesher = QPushButton("Mesh")
+        mesher.clicked.connect(partial(self.placeholderFunction))
+        listLayout.addWidget(mesher, alignment=Qt.AlignmentFlag.AlignRight)
 
         listLayout.addStretch()
         listLayout.setSizeConstraint(QHBoxLayout.SizeConstraint.SetFixedSize)
@@ -86,4 +88,4 @@ class Point:
     def __init__(self, x: int, y: int, val: float = 0):
         self.x = x
         self.y = y
-        self.val = val
+        self.val = val """

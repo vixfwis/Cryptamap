@@ -99,26 +99,6 @@ class Model(QObject):
 
         layer = Layer(model = self, location = loc)
 
-        listWidget = QListWidgetItem()
-        
-        listItem = QWidget()
-        listLayout = QHBoxLayout()
-        
-        listText = QLabel(layer.name)
-        listLayout.addWidget(listText, alignment=Qt.AlignmentFlag.AlignLeft)
-
-        listButton = QPushButton("TEST TEST TEST")
-        listButton.clicked.connect(partial(self.placeholderFunction))
-        listLayout.addWidget(listButton, alignment=Qt.AlignmentFlag.AlignRight)
-
-        listLayout.addStretch()
-        listLayout.setSizeConstraint(QHBoxLayout.SizeConstraint.SetFixedSize)
-        listItem.setLayout(listLayout)
-        listWidget.setSizeHint(listItem.sizeHint())
-
-        self.view.list.addItem(listWidget)
-        self.view.list.setItemWidget(listWidget, listItem)
-
         self.layers.insert(loc, layer)
         self.setActiveLayer(loc)
         
@@ -175,6 +155,8 @@ class Layer:
         self.res = res
         self.name = name if name else f"Layer {len(self.model.layers)}"
         self.location = location
+
+        self.mesh = []
         
         self.rows = self.model.size.width()*self.res + 1
         self.columns = self.model.size.height()*self.res+1
@@ -183,6 +165,8 @@ class Layer:
         for i in range(len(self.pointList)):
             x,y = self.xyAt(i)
             self.pointList[i] = Point(x, y)
+
+        self.createLayerBox()
 
     def getPoint(self, idx: int) -> Point:
         return self.pointList[idx]
@@ -200,7 +184,49 @@ class Layer:
     
     def createListWidgetItem() -> QListWidgetItem:
         return
+
+    def createLayerBox(self):
+        listWidget = QListWidgetItem()
         
+        listItem = QWidget()
+        listLayout = QHBoxLayout()
+        
+        listText = QLabel(self.name)
+        listLayout.addWidget(listText, alignment=Qt.AlignmentFlag.AlignLeft)
+
+        mesher = QPushButton("Mesh")
+        mesher.clicked.connect(self.createSimpleMesh)
+        listLayout.addWidget(mesher, alignment=Qt.AlignmentFlag.AlignRight)
+
+        listLayout.addStretch()
+        listLayout.setSizeConstraint(QHBoxLayout.SizeConstraint.SetFixedSize)
+        listItem.setLayout(listLayout)
+        listWidget.setSizeHint(listItem.sizeHint())
+
+        self.model.view.list.addItem(listWidget)
+        self.model.view.list.setItemWidget(listWidget, listItem)
+
+    def createSimpleMesh(self):
+        self.mesh = []
+        print("Here")
+        for x in range(self.rows - 1):
+            for y in range(self.columns - 1):
+                points = [
+                    self.getPoint(x+0,y+0),
+                    self.getPoint(x+0,y+1),
+                    self.getPoint(x+1,y+0),
+                    self.getPoint(x+1,y+1)
+                ]
+                points = list(filter(lambda x: x.val > 0, points))
+                if len(points) == 4:
+                    self.mesh.append((points[0], points[1], points[2]))
+                    self.mesh.append((points[1], points[2], points[3]))
+
+                elif len(points) == 3:
+                    self.mesh.append((points[0], points[1], points[2]))
+
+                else:
+                    pass
 
 class Point:
     def __init__(self, x: int, y: int, val: float = 0):

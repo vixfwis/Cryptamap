@@ -1,5 +1,5 @@
 import model
-from layer import Layer
+from model import Layer
 
 import math
 from enum import Enum
