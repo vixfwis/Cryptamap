@@ -208,7 +208,6 @@ class Layer:
 
     def createSimpleMesh(self):
         self.mesh = []
-        print("Here")
         for x in range(self.rows - 1):
             for y in range(self.columns - 1):
                 points = [
@@ -227,6 +226,8 @@ class Layer:
 
                 else:
                     pass
+
+        self.model.map.renderMesh(self)
 
 class Point:
     def __init__(self, x: int, y: int, val: float = 0):

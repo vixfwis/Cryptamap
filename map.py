@@ -49,3 +49,32 @@ class Map():
     def fill(self, color: QColor):
         for idx in range(0, len(self.map), 4):
             self.pixSet(idx, color)
+
+    def renderMesh(self, layer: model.Layer):
+        for idx in range(0, len(self.map), 4):
+            x = idx/4 % self.size.width()
+            y = idx/4 // self.size.width()
+            for tri in layer.mesh:
+                if self.inTri(x,y, tri):
+                    self.pixSet(idx, QColor('white'))
+
+        self.show()
+
+
+    def inTri(self, x,y, tri): #https://www.geeksforgeeks.org/check-whether-a-given-point-lies-inside-a-triangle-or-not/
+        A = (tri[0].x * self.model.dpi , tri[0].y * self.model.dpi)
+        B = (tri[1].x * self.model.dpi , tri[1].y * self.model.dpi)
+        C = (tri[2].x * self.model.dpi , tri[2].y * self.model.dpi)
+        P = (x,y)
+
+        denominator = ((B[1] - C[1]) * (A[0] - C[0]) +
+                    (C[0] - B[0]) * (A[1] - C[1]))
+        a = ((B[1] - C[1]) * (P[0] - C[0]) +
+            (C[0] - B[0]) * (P[1] - C[1])) / denominator
+        b = ((C[1] - A[1]) * (P[0] - C[0]) +
+            (A[0] - C[0]) * (P[1] - C[1])) / denominator
+        c = 1 - a - b
+    
+        if a >= 0 and b >= 0 and c >= 0:
+            return True
+        return False
