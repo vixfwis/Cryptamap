@@ -283,8 +283,8 @@ class Layer:
                 triangulationIndex = 0
 
                 p1 = self.getPoint(x+0,y+0)
-                p2 = self.getPoint(x+0,y+1)
-                p4 = self.getPoint(x+1,y+0)
+                p2 = self.getPoint(x+1,y+0)
+                p4 = self.getPoint(x+0,y+1)
                 p8 = self.getPoint(x+1,y+1)
 
                 if p1.val >= surfaceLevel: 
@@ -297,13 +297,13 @@ class Layer:
                     triangulationIndex += 8
 
                 if p1.val != p2.val:
-                    pa = Point(p1.x + (surfaceLevel - p1.val)/(p1.val-p2.val), p1.y, surfaceLevel)
+                    pa = Point(p1.x + (surfaceLevel - p1.val)/(p1.val-p2.val) + 1, p1.y, surfaceLevel)
                 if p1.val != p4.val:
-                    pb = Point(p1.x, p1.y + (surfaceLevel - p1.val)/(p1.val-p4.val), surfaceLevel)
+                    pb = Point(p1.x, p1.y + (surfaceLevel - p1.val)/(p1.val-p4.val) + 1, surfaceLevel)
                 if p2.val != p8.val:
-                    pc = Point(p2.x, p2.y + (surfaceLevel - p2.val)/(p2.val-p8.val), surfaceLevel)
+                    pc = Point(p2.x, p2.y + (surfaceLevel - p2.val)/(p2.val-p8.val) + 1, surfaceLevel)
                 if p4.val != p8.val:
-                    pd = Point(p4.x + (surfaceLevel - p4.val)/(p4.val-p8.val), p4.y, surfaceLevel)
+                    pd = Point(p4.x + (surfaceLevel - p4.val)/(p4.val-p8.val) + 1, p4.y, surfaceLevel)
 
                 tris = []
                 for tri in triangulationTable[triangulationIndex]:
