@@ -2,7 +2,11 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+#ifdef __unix__
+#define API __attribute__((visibility("default")))
+#else
 #define API __declspec(dllexport) 
+#endif
 
 API void test()
 {
