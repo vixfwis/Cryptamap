@@ -3,6 +3,7 @@ import math
 from enum import Enum
 
 import model
+import renderer
 
 from PyQt6.QtGui import (
     QImage,
@@ -27,8 +28,9 @@ class Map():
         self.size = self.model.size * self.model.dpi
         self.map = bytearray(self.size.width() * self.size.height() * 4)
         self.model.setMap(self)
-
-        self.initMap()
+        renderer.init(self)
+        #self.initMap()
+        renderer.c_initMap()
 
     def show(self):
         return QImage(
